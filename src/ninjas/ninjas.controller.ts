@@ -9,13 +9,16 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateNinjaDto } from './dto/create-ninja.dto';
 import { UpdateNinjaDto } from './dto/update-ninja.dto';
 import { NinjasService } from './ninjas.service';
+import { BeltGuard } from 'src/belt/belt.guard';
 
 @Controller('ninjas')
+// @UseGuards(BeltGuard) // we can apply gurds to entire controller... this protects all the ninja routes
 export class NinjasController {
   constructor(private readonly ninjaService: NinjasService) {}
 
@@ -40,6 +43,7 @@ export class NinjasController {
 
   // POST /ninjas
   @Post()
+  @UseGuards(BeltGuard) // we can apply gurds to individual routes
   createNinja(@Body(new ValidationPipe()) CreateNinjaDto: CreateNinjaDto) {
     return this.ninjaService.createNinja(CreateNinjaDto);
   }
